@@ -1,0 +1,42 @@
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: #1976d2;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.card-container {
+  display: flex;
+  margin-top: 16px;
+}
+
+.card {
+  all: unset;
+  border-radius: 4px;
+  border: 1px solid #ffffff;
+  background-color: #fafafa;
+  color: #1976d2;
+  height: 20px;
+  width: 100px;
+  margin: 0 8px 16px;
+  padding: 16px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  line-height: 24px;
+}
+
+.card-container .card {
+  cursor: pointer;
+}
