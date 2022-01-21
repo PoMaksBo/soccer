@@ -1,0 +1,36 @@
+<form class="card-autorization"
+  [formGroup]="form">
+
+  <div class="header">
+    <header>Войти в систему</header>
+  </div>
+  <div class="input" >
+    <a>Login</a>
+    <input id = 'userName'
+           formControlName="userName"
+    >
+    <div class="er">
+      <span *ngIf="form.controls['userName'].invalid && form.controls['userName'].touched">Введите логин</span>
+    </div>
+
+  </div>
+  <div class="input">
+    <a>Password</a>
+    <input id = 'password'
+           type="password"
+           formControlName="password"
+    >
+  </div>
+  <div class="er">
+    <span *ngIf="form.controls['password'].invalid && form.controls['password'].touched">Введите пароль</span>
+  </div>
+  <button
+    [disabled]="form.invalid || form.disabled"
+    (click)="authentication()">Войти</button>
+
+</form>
+
+
+
+
+
