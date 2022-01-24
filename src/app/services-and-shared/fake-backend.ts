@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 
 // array in local storage for registered users
-const usersKey = 'angular-10-registration-login-example-users';
+const usersKey = 'tableSoccer-example-users';
 // @ts-ignore
 let users = JSON.parse(localStorage.getItem(usersKey)) || [];
 
@@ -39,7 +39,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function authenticate() {
             const { username, password } = body;
-            const user = users.find((x: { username: any; password: any; }) => x.username === username && x.password === password);
+            const user = users.find((x: { username: string; password: string; }) => x.username === username && x.password === password);
             if (!user) return error('Username or password is incorrect');
             return ok({
                 ...basicDetails(user),
@@ -50,10 +50,12 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function register() {
             const user = body
 
-            if (users.find((x: { username: any; password: any; }) => x.username === user.username)) {
+            if (users.find((x: { username: string; password: string; }) => x.username === user.username)) {
                 return error('Username "' + user.username + '" is already taken')
             }
 
+            // user.firstname = ''
+            // user.lastname = ''
             user.id = users.length ? Math.max(...users.map((x: { id: any; }) => x.id)) + 1 : 1;
             users.push(user);
             localStorage.setItem(usersKey, JSON.stringify(users));
@@ -76,7 +78,13 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             if (!isLoggedIn()) return unauthorized();
 
             let params = body;
-            let user = users.find((x: { id: any; }) => x.id === idFromUrl());
+          console.log('Бэкэнд')
+          console.log(body.id)
+          console.log(body.username)
+          console.log(body.firstname)
+          console.log(body.lastname)
+
+          let user = users.find((x: { id: number; }) => x.id === idFromUrl());
 
             // only update password if entered
             if (!params.password) {
@@ -100,14 +108,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         // helper functions
 
-        function ok(body?: { token?: string; id: any; username: any; firstName: any; lastName: any; } | undefined) {
+        function ok(body?: { token?: string; id: any; username: any; firstname?: any; lastname?: any; } | undefined) {
             return of(new HttpResponse({ status: 200, body }))
                 .pipe(delay(500)); // delay observable to simulate server api call
         }
 
         function error(message: string) {
             return throwError({ error: { message } })
-                .pipe(materialize(), delay(500), dematerialize()); // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648);
+                .pipe(delay(500), dematerialize()); // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648);
         }
 
         function unauthorized() {
@@ -115,13 +123,13 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 .pipe(materialize(), delay(500), dematerialize());
         }
 
-        function basicDetails(user: { id: any; username: any; firstName: any; lastName: any; }) {
-            const { id, username, firstName, lastName } = user;
-            return { id, username, firstName, lastName };
+        function basicDetails(user: { id: any; username: any; firstname: any; lastname: any; }) {
+            const { id, username, firstname, lastname } = user;
+            return { id, username, firstname, lastname };
         }
 
         function isLoggedIn() {
-            return headers.get('Authorization') === 'Bearer fake-jwt-token';
+            return headers.get('Authorization') === 'fake-jwt-token';
         }
 
         function idFromUrl() {

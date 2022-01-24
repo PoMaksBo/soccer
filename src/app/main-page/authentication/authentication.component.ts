@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services-and-shared/auth.service";
 import {Subscription} from "rxjs";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {AlertService} from "../../services-and-shared/alert.service";
 
 @Component({
   selector: 'app-authentication',
@@ -11,8 +12,9 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 })
 export class AuthenticationComponent implements OnInit, OnDestroy {
 
-  error?: string
   aSub?: Subscription
+  loading = false;
+  submitted = false;
   form: FormGroup = new FormGroup({
     userName: new FormControl(null, [Validators.required]),
     password:new FormControl(null, [Validators.required])
@@ -20,7 +22,8 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   constructor(private auth: AuthService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private alert: AlertService) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: Params) => {
@@ -39,14 +42,19 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   authentication() {
+    this.submitted = true;
+
+    // reset alerts on submit
+    this.alert.clear();
     this.form.disable()
-    this.aSub = this.auth.login(this.form.value).subscribe(() => {
+    this.loading = true;
+    this.aSub = this.auth.login(this.form.value.userName, this.form.value.password).subscribe(() => {
         console.log('Login Succesfull!')
         this.router.navigate(['/userPage/personal-page'])
       },
       error => {
-        this.error = error
-        console.warn(error)
+      this.alert.error(error);
+      this.loading = false;
         this.form.enable()
       }
     )

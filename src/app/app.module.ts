@@ -14,6 +14,8 @@ import { UserTopBarComponent } from './user-page/user-top-bar/user-top-bar.compo
 import { UserPersonalComponent } from './user-page/user-personal/user-personal.component';
 import {TokenInterceptor} from "./services-and-shared/token.interceptor";
 import {fakeBackendProvider} from "./services-and-shared/fake-backend";
+import { AlertComponent } from './main-page/alert/alert.component';
+import { ErrorInterceptor } from './services-and-shared/error.interceptor';
 
 
 @NgModule({
@@ -25,7 +27,8 @@ import {fakeBackendProvider} from "./services-and-shared/fake-backend";
     MainPageComponent,
     UserPageComponent,
     UserTopBarComponent,
-    UserPersonalComponent
+    UserPersonalComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -35,9 +38,8 @@ import {fakeBackendProvider} from "./services-and-shared/fake-backend";
     HttpClientModule,
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS,
-    multi: true,
-    useClass: TokenInterceptor},
+    {provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     fakeBackendProvider
   ],
   bootstrap: [AppComponent]

@@ -1,8 +1,9 @@
 export interface User {
-  id?: string,
-  userName: string
+  id?: number
+  token?: string
+  username: string
   password: string
-  name?: string
-  surname?: string
+  firstname?: string
+  lastname?: string
   admin?: boolean
 }

@@ -1,1 +1,40 @@
-<div class="otherText">Random text</div>
+<div class="otherText">
+  <form [formGroup]="form">
+    <div class="p-4">
+      <div class="container">
+        <h1>Hi {{user.username}}!</h1>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td>
+            <a>username</a>
+            <input type="text" formControlName="username" class="form-control">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a>Имя игрока</a>
+            <input type="text" formControlName="firstname" class="form-control">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a>Фамилия игрока</a>
+            <input type="text" formControlName="lastname" class="form-control">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a (click)="updateUser()" class="btn btn-sm btn-primary mr-1">Update</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+  <p>
+    <a class="btn btn-primary my-2">Create Game</a>
+    <a class="btn btn-primary my-2">Results</a>
+  </p>
+</div>

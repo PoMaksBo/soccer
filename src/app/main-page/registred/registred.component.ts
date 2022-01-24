@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services-and-shared/auth.service";
-import {User} from "../../_interfaces/user.interface";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {first, Subscription} from "rxjs";
+import {AlertService} from "../../services-and-shared/alert.service";
 
 @Component({
   selector: 'app-registred',
@@ -13,16 +13,22 @@ import {Subscription} from "rxjs";
 export class RegistredComponent implements OnInit, OnDestroy {
 
   aSub?: Subscription
-  form: FormGroup = new FormGroup({
-    log: new FormControl('', [Validators.required]),
-    pass:new FormControl('', [Validators.required])
-  })
+  form!: FormGroup;
+  loading = false;
+  submitted = false;
   constructor(private reg: AuthService,
               private router: Router,
-              private route: ActivatedRoute
+              private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              private alertService: AlertService
               ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+    this.alertService.clear();
   }
 
   ngOnDestroy() {
@@ -32,20 +38,27 @@ export class RegistredComponent implements OnInit, OnDestroy {
   }
 
   register() {
+    this.submitted = true;
+    this.alertService.clear()
     this.form.disable()
-    this.aSub = this.reg.registred(this.form.value).subscribe(
-      () => {
-        this.router.navigate(['/login'], {
-          queryParams: {
-            registered: true
-          }
-        })
-      },
-      error => {
-        console.warn(error)
-        this.form.enable()
-      }
-    )
+    this.aSub = this.reg.registred(this.form.value)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.alertService.success('Registration successful', { keepAfterRouteChange: true });
+          this.router.navigate(['../login'], {
+            relativeTo: this.route,
+            queryParams: {
+              registered: true
+            }
+          });
+        },
+        error: error => {
+          this.alertService.error(error);
+          this.loading = false;
+          this.form.enable()
+        }
+      });
 
   }
 }

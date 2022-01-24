@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {User} from "../_interfaces/user.interface";
 import {HttpClient} from "@angular/common/http";
-import {Observable, of, tap} from "rxjs";
+import {BehaviorSubject, map, Observable, tap} from "rxjs";
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,51 +9,52 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  private id: string = ""
-  private isAdmin?: number
+  private userSubject: BehaviorSubject<User>;
+  public user: Observable<User>;
+  private token: string = ""
+  private isAdmin: boolean = false
+
   constructor(
     private http: HttpClient)
-  { }
+  {
+    // @ts-ignore
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
+    this.user = this.userSubject.asObservable();
+  }
 
-  login(user: User): Observable<{id: string}>{
-  return this.http.post<{id: string}>(`${environment.apiUrl}/users/authenticate`, user)
+  login(username: string, password: string): Observable<any>{
+  return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
     .pipe(
-      tap(
-        ({id}) => {
-          localStorage.setItem('id', id)
-          this.setId(id)
-        }),
-      // tap(
-      //   ({users: [{isAdmin}]}) => {
-      //   localStorage.setItem('isAdmin', isAdmin.toString())
-      //   this.setAdmin(isAdmin)
-      //   })
+      tap(user => {
+        localStorage.setItem('user', JSON.stringify(user));
+        this.userSubject.next(user)
+        if (user.id === 1) {
+          localStorage.setItem('Admin', "true")
+          this.setAdmin(true)
+        } else {
+          localStorage.setItem('Admin', "false")
+          this.setAdmin(false)
+        }
+        let tokenS = user.token!.toString()
+        localStorage.setItem('token', tokenS)
+            this.setToken(tokenS)
+      })
     )
   }
 
-  // login(user: User) {
-  //   return of({id: "0", login: "mpoletaev", password: "123", isAdmin: 1}).pipe(
-  //     tap(
-  //       ({id}) => {
-  //         localStorage.setItem('auth-id', id)
-  //         this.setId(id)
-  //       }),
-  //     tap(
-  //       ({isAdmin}) => {
-  //         localStorage.setItem('isAdmin', isAdmin.toString())
-  //         this.setAdmin(isAdmin)
-  //       }))
-  // }
+  public get userValue(): User {
+    return this.userSubject.value;
+  }
 
   registred(user: User): Observable<User> {
-    return this.http.post<User>('/users/register', user)
+    return this.http.post<User>(`${environment.apiUrl}/users/register`, user)
   }
 
-  setId(id: string) {
-    this.id = id
+  setToken(token: string) {
+    this.token = token
   }
 
-  setAdmin(isAdmin: number) {
+  setAdmin(isAdmin: boolean) {
     this.isAdmin = isAdmin
   }
 
@@ -61,16 +62,42 @@ export class AuthService {
     return this.isAdmin
   }
 
-  getId() {
-    return this.id
+  getToken() {
+    return this.token
   }
 
   isAuthenticated(): boolean {
-    return !!this.id
+    return !!this.token
   }
   logout() {
-    this.setId('')
-    this.setAdmin(0)
-    localStorage.clear()
+    this.setToken('')
+    localStorage.removeItem('token');
+    localStorage.removeItem('Admin');
+    // @ts-ignore
+    this.userSubject.next(null);
+  }
+
+  getById(id: number) {
+    return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+  }
+
+  getAll() {
+    return this.http.get<User[]>(`${environment.apiUrl}/users`);
+  }
+
+  update(id: number, params: User) {
+    return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+      .pipe(map(x => {
+        // update stored user if the logged in user updated their own record
+        if (+id == this.userValue.id) {
+          // update local storage
+          const user = { ...this.userValue, ...params };
+          localStorage.setItem('user', JSON.stringify(user));
+
+          // publish updated user to subscribers
+          this.userSubject.next(user);
+        }
+        return x;
+      }));
   }
 }

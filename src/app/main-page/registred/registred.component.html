@@ -1,28 +1,29 @@
 <form class="card-autorization"
-  [formGroup]="form">
+  [formGroup]="form"
+  (ngSubmit)="register()">
 
   <div class="header">
     <header>Создание учетной записи</header>
   </div>
   <div class="input" >
     <a>Login</a>
-    <input id = 'log'
-           formControlName="log"
+    <input id = 'username'
+           formControlName="username"
     >
     <div class="er">
-      <span *ngIf="form.controls['log'].invalid && form.controls['log'].touched">Введите логин</span>
+      <span *ngIf="form.controls['username'].invalid && form.controls['username'].touched">Введите логин</span>
     </div>
 
   </div>
   <div class="input">
     <a>Password</a>
-    <input id = 'pass'
+    <input id = 'password'
            type="password"
-           formControlName="pass"
+           formControlName="password"
     >
   </div>
   <div class="er">
-    <span *ngIf="form.controls['pass'].invalid && form.controls['pass'].touched">Введите пароль</span>
+    <span *ngIf="form.controls['password'].invalid && form.controls['password'].touched">Введите пароль</span>
   </div>
   <button
     [disabled]="form.invalid || form.disabled"
