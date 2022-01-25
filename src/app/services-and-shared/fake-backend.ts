@@ -115,7 +115,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function error(message: string) {
             return throwError({ error: { message } })
-                .pipe(delay(500), dematerialize()); // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648);
+                .pipe(materialize(), delay(500), dematerialize()); // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648);
         }
 
         function unauthorized() {
@@ -129,7 +129,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function isLoggedIn() {
-            return headers.get('Authorization') === 'fake-jwt-token';
+            return headers.get('Authorization') === 'Bearer fake-jwt-token';
         }
 
         function idFromUrl() {

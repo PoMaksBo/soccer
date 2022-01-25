@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -9,12 +10,15 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.auth.isAuthenticated()) {
+    const user = this.auth.userValue
+    const isLoggedIn = user && user.token
+    const isApiUrl = req.url.startsWith(environment.apiUrl);
+    if (isLoggedIn && isApiUrl) {
       req = req.clone({
         setHeaders: {
-          Authorization: this.auth.getToken()
+          Authorization: `Bearer ${user.token}`
         }
-      })
+      });
     }
     return next.handle(req)
   }

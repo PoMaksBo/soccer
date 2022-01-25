@@ -1,22 +1,30 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AuthenticationComponent} from "./main-page/authentication/authentication.component";
-import {RegistredComponent} from "./main-page/registred/registred.component";
-import {MainPageComponent} from "./main-page/main-page.component";
-import {UserPageComponent} from "./user-page/user-page.component";
-import {UserPersonalComponent} from "./user-page/user-personal/user-personal.component";
+import {AuthenticationComponent} from "./title/authentication/authentication.component";
+import {RegistredComponent} from "./title/registred/registred.component";
+import {TitleComponent} from "./title/title.component";
+import {UserComponent} from "./components/user/user.component";
+import {PersonalComponent} from "./components/user/personal/personal.component";
 import {AuthGuard} from "./services-and-shared/auth.guard";
+import {GameComponent} from "./components/game/game.component";
+import {CreateComponent} from "./components/game/create/create.component";
+import {ResultsComponent} from "./components/game/results/results.component";
 
 
 const routes: Routes = [
-  {path: '', component: MainPageComponent, children: [
+  {path: '', component: TitleComponent, children: [
       {path: 'registration', component: RegistredComponent},
       {path: 'login', component: AuthenticationComponent},
       {path: '', redirectTo: '/login', pathMatch: 'full' }
     ]},
-  {path: 'userPage', component: UserPageComponent, canActivate: [AuthGuard], children:[
-      {path: 'userPage', redirectTo: 'userPage/personal-page', pathMatch: 'full'},
-      {path: 'personal-page', component:  UserPersonalComponent}
+  {path: 'user', component: UserComponent, canActivate: [AuthGuard], children:[
+      {path: 'user', redirectTo: 'user/personal', pathMatch: 'full'},
+      {path: 'personal', component:  PersonalComponent}
+    ]},
+  {path: 'game', component: GameComponent, canActivate: [AuthGuard], children:[
+      {path: 'game', redirectTo: 'game/create', pathMatch: 'full'},
+      {path: 'create', component: CreateComponent},
+      {path: 'results', component: ResultsComponent}
     ]}
 ];
 

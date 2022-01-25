@@ -50,7 +50,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.aSub = this.auth.login(this.form.value.userName, this.form.value.password).subscribe(() => {
         console.log('Login Succesfull!')
-        this.router.navigate(['/userPage/personal-page'])
+        this.router.navigate(['/user/personal'])
       },
       error => {
       this.alert.error(error);

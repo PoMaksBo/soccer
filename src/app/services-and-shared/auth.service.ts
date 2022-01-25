@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import {User} from "../_interfaces/user.interface";
+import {User} from "../_models/user.interface";
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map, Observable, tap} from "rxjs";
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class AuthService {
 
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
-  private token: string = ""
-  private isAdmin: boolean = false
+  private token = ""
+  private isAdmin = false
 
-  constructor(
-    private http: HttpClient)
-  {
+  constructor(private http: HttpClient) {
     // @ts-ignore
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
     this.user = this.userSubject.asObservable();
+  }
+
+  public get userValue(): User {
+    return this.userSubject.value;
   }
 
   login(username: string, password: string): Observable<any>{
@@ -40,10 +40,6 @@ export class AuthService {
             this.setToken(tokenS)
       })
     )
-  }
-
-  public get userValue(): User {
-    return this.userSubject.value;
   }
 
   registred(user: User): Observable<User> {
@@ -93,7 +89,6 @@ export class AuthService {
           // update local storage
           const user = { ...this.userValue, ...params };
           localStorage.setItem('user', JSON.stringify(user));
-
           // publish updated user to subscribers
           this.userSubject.next(user);
         }
