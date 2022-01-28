@@ -85,9 +85,8 @@ export class AlertComponent implements OnInit, OnDestroy {
       [AlertType.Info]: 'alert alert-info',
       [AlertType.Warning]: 'alert alert-warning'
     }
-    let type = alert.type
-    if (type) {
-      classes.push(alertTypeClass[type]);
+    if (alert.type) {
+      classes.push(alertTypeClass[alert.type]);
     }
     if (alert.fade) {
       classes.push('fade');

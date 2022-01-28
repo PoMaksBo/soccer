@@ -24,7 +24,6 @@ export class AuthService {
   }
 
   public login(username: string, password: string): Observable<User>{
-    // return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, JSON.stringify({username, password}))  //Строка для JSON
     return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
     .pipe(
       tap(user => {
@@ -42,8 +41,9 @@ export class AuthService {
     )
   }
 
+
   public registred(user: User): Observable<User> {
-    // return this.http.post<User>(`${environment.apiUrl}/users/register`, JSON.stringify(user))
+    // return this.http.post<User>(`${environment.apiUrl}/registr`, JSON.stringify(user))
     return this.http.post<User>(`${environment.apiUrl}/users/register`, user)
   }
 
