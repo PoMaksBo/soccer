@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services-and-shared/auth.service";
 import {Subscription} from "rxjs";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AlertService} from "../../services-and-shared/alert.service";
 
 @Component({
@@ -10,13 +10,11 @@ import {AlertService} from "../../services-and-shared/alert.service";
   templateUrl: './authentication.component.html',
   styleUrls: ['./authentication.component.css']
 })
-export class AuthenticationComponent implements OnInit, OnDestroy {
-
+export class AuthenticationComponent implements OnDestroy {
+  hide = true
   aSub?: Subscription
-  loading = false;
-  submitted = false;
   form: FormGroup = new FormGroup({
-    userName: new FormControl(null, [Validators.required]),
+    username: new FormControl(null, [Validators.required]),
     password:new FormControl(null, [Validators.required])
   })
 
@@ -25,37 +23,23 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private alert: AlertService) { }
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params: Params) => {
-      if (params['registered']) {
-        //Теперь вы можете зайти в свой аккаунт
-      } else if (params['accessDenied']) {
-        //Для начала авторизуйтесь
-      }
-    })
-  }
-
   ngOnDestroy() {
     if(this.aSub){
       this.aSub.unsubscribe()
     }
   }
 
-  authentication() {
-    this.submitted = true;
-
+  public authentication(): void {
     // reset alerts on submit
     this.alert.clear();
     this.form.disable()
-    this.loading = true;
-    this.aSub = this.auth.login(this.form.value.userName, this.form.value.password).subscribe(() => {
+    this.aSub = this.auth.login(this.form.value.username, this.form.value.password).subscribe(() => {
         console.log('Login Succesfull!')
         this.router.navigate(['/user/personal'])
       },
       error => {
       this.alert.error(error);
-      this.loading = false;
-        this.form.enable()
+      this.form.enable()
       }
     )
     this.form.reset()

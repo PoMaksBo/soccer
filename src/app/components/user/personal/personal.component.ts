@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../services-and-shared/auth.service";
 import {User} from "../../../_models/user.interface";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import { first } from 'rxjs/operators';
+import {AlertService} from "../../../services-and-shared/alert.service";
 
 @Component({
   selector: 'app-personal',
@@ -12,16 +13,20 @@ import { first } from 'rxjs/operators';
 })
 export class PersonalComponent implements OnInit {
 
+  isAdmin! : boolean
   id!: number
   form!: FormGroup
   user: User
+
   constructor(
     private acc: AuthService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private alertService: AlertService
   ) {
     this.user = this.acc.userValue
+    this.isAdmin = JSON.parse(localStorage.getItem('Admin') || 'false')
   }
 
   ngOnInit(): void {
@@ -29,27 +34,23 @@ export class PersonalComponent implements OnInit {
     this.form = this.formBuilder.group({
       username: [this.user.username],
       firstname: [this.user.firstname],
-      lastname: [this.user.lastname],
-      qwerty: []
+      lastname: [this.user.lastname]
     })
     this.acc.getById(this.id)
       .pipe(first())
       .subscribe(x => this.form.patchValue(x));
   }
 
-
-
   updateUser() {
     this.acc.update(this.id, this.form.value)
       .pipe(first())
       .subscribe({
         next: () => {
-          alert(`Данные игрока обновлены`)
-          this.router.navigate(['../login'])
+          this.alertService.success('Update successful', { keepAfterRouteChange: true });
+          this.router.navigate(['/user/personal'])
         },
         error: error => {
-          // this.alertService.error(error);
-          // this.loading = false;
+          this.alertService.error(error);
           console.warn(error)
         }
       });

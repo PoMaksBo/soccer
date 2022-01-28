@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+
 import {AuthenticationComponent} from "./title/authentication/authentication.component";
 import {RegistredComponent} from "./title/registred/registred.component";
 import {TitleComponent} from "./title/title.component";
@@ -9,7 +11,13 @@ import {AuthGuard} from "./services-and-shared/auth.guard";
 import {GameComponent} from "./components/game/game.component";
 import {CreateComponent} from "./components/game/create/create.component";
 import {ResultsComponent} from "./components/game/results/results.component";
+import {AdminComponent} from "./admin/admin.component";
+import {TeamsComponent} from "./admin/teams/teams.component";
+import {GamesComponent} from "./admin/games/games.component";
+import {PlayersComponent} from "./admin/players/players.component";
+import {DashboardComponent} from "./admin/dashboard/dashboard.component";
 
+// canActivate: [AuthGuard] - условие авторизации
 
 const routes: Routes = [
   {path: '', component: TitleComponent, children: [
@@ -18,13 +26,18 @@ const routes: Routes = [
       {path: '', redirectTo: '/login', pathMatch: 'full' }
     ]},
   {path: 'user', component: UserComponent, canActivate: [AuthGuard], children:[
-      {path: 'user', redirectTo: 'user/personal', pathMatch: 'full'},
-      {path: 'personal', component:  PersonalComponent}
+      {path: 'personal', component:  PersonalComponent},
+      {path: 'user', redirectTo: '/personal'},
     ]},
   {path: 'game', component: GameComponent, canActivate: [AuthGuard], children:[
-      {path: 'game', redirectTo: 'game/create', pathMatch: 'full'},
       {path: 'create', component: CreateComponent},
       {path: 'results', component: ResultsComponent}
+    ]},
+  {path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children:[
+      {path: 'dashboard', component: DashboardComponent},
+      {path: 'games', component: GamesComponent},
+      {path: 'players', component: PlayersComponent},
+      {path: 'team', component: TeamsComponent}
     ]}
 ];
 

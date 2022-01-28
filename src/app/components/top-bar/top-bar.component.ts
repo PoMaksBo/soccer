@@ -9,14 +9,12 @@ import {Router} from "@angular/router";
 })
 export class TopBarComponent implements OnInit {
 
-  constructor(private auth: AuthService,
-              private router: Router) { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit(): void {
   }
 
   logOut() {
     this.auth.logout()
-    this.router.navigate(['/login'])
   }
 }

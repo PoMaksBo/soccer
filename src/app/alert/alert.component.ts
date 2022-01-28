@@ -14,9 +14,12 @@ export class AlertComponent implements OnInit, OnDestroy {
   alertSubscription!: Subscription;
   routeSubscription!: Subscription;
 
-  constructor(private router: Router, private alertService: AlertService) { }
+  constructor(
+    private router: Router,
+    private alertService: AlertService
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     // subscribe to new alert notifications
     this.alertSubscription = this.alertService.onAlert(this.id)
       .subscribe(alert => {
@@ -82,10 +85,10 @@ export class AlertComponent implements OnInit, OnDestroy {
       [AlertType.Info]: 'alert alert-info',
       [AlertType.Warning]: 'alert alert-warning'
     }
-
-    // @ts-ignore
-    classes.push(alertTypeClass[alert.type]);
-
+    let type = alert.type
+    if (type) {
+      classes.push(alertTypeClass[type]);
+    }
     if (alert.fade) {
       classes.push('fade');
     }

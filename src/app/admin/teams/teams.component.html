@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-title>Информация об имеющихся командах</mat-card-title>
+  <mat-card-content>
+    <mat-selection-list [(ngModel)]="teamList" >
+      <mat-list-option *ngFor="let team of teams" [value]="team">
+        Название команды:{{team.teamName}}
+        Первый игрок: {{team.player1}}
+        Второй игрок: {{team.player2}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="createTeam()">Создать команду</button>
+    <button mat-raised-button color="primary" (click)="deleteTeams()">Удалить выбранные команды</button>
+  </mat-card-actions>
+</mat-card>

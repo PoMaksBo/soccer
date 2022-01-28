@@ -25,6 +25,15 @@ import { ErrorInterceptor } from './services-and-shared/error.interceptor';
 import { GameComponent } from './components/game/game.component';
 import { ResultsComponent } from './components/game/results/results.component';
 import { CreateComponent } from './components/game/create/create.component';
+import {MatIconModule} from "@angular/material/icon";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatSelectModule} from "@angular/material/select";
+import { AdminComponent } from './admin/admin.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { PlayersComponent } from './admin/players/players.component';
+import { TeamsComponent } from './admin/teams/teams.component';
+import { GamesComponent } from './admin/games/games.component';
+import {MatListModule} from "@angular/material/list";
 
 
 
@@ -42,7 +51,12 @@ import { CreateComponent } from './components/game/create/create.component';
     AlertComponent,
     GameComponent,
     ResultsComponent,
-    CreateComponent
+    CreateComponent,
+    AdminComponent,
+    DashboardComponent,
+    PlayersComponent,
+    TeamsComponent,
+    GamesComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +70,10 @@ import { CreateComponent } from './components/game/create/create.component';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatListModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor},

@@ -1,0 +1,13 @@
+<mat-card>
+  <mat-card-title>Информация об зарегистрировавшихся игроках</mat-card-title>
+  <mat-card-content>
+    <mat-selection-list [(ngModel)]="userList" >
+      <mat-list-option *ngFor="let user of users" [value]="user">
+        {{user.username}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="deleteUsers()">Удалить выбранных игроков</button>
+  </mat-card-actions>
+</mat-card>

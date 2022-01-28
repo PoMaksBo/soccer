@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-title>Приветствую администратор {{user.username}}</mat-card-title>
+  <mat-card-subtitle>Возможности администратора</mat-card-subtitle>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="viewPlayers()">Панель управления игроками</button>
+    <button mat-raised-button color="primary" (click)="viewGames()">Панель игр</button>
+    <button mat-raised-button color="primary" (click)="viewTeams()">Панель управления командами</button>
+    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>
+  </mat-card-actions>
+  <mat-card-content>
+    <app-players *ngIf="players"></app-players>
+    <app-games *ngIf="games"></app-games>
+    <app-teams *ngIf="teams"></app-teams>
+  </mat-card-content>
+</mat-card>
+

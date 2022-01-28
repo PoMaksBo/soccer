@@ -1,0 +1,14 @@
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+.example-card {
+  max-width: 400px;
+}
+.main-card {
+  max-width: 600px;
+}
+
+.fieldWidth {
+  width: 200px;
+}

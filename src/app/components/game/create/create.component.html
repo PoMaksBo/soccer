@@ -1,3 +1,152 @@
-<div class="">
+<mat-card class="main-card">
+  <mat-card-title>Создание игры</mat-card-title>
+  <mat-card-subtitle>Создатель игры: {{activeUser.username}}</mat-card-subtitle>
+  <mat-card-content>
+    <mat-card class="example-card">
+      <mat-card-subtitle>Команда игрока</mat-card-subtitle>
+      <mat-card-content>
+        <form class="example-form">
+          <mat-form-field class="example-full-width fieldWidth" appearance="fill">
+            <mat-label>Второй игрок</mat-label>
+              <input type="text"
+                placeholder="Выберите игрока"
+                aria-label="player2"
+                matInput
+                [formControl]="player2form"
+                [matAutocomplete]="auto">
+            <button *ngIf="player2form.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(player2form, player2)">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let player of users" [value]="player.username">
+                {{player.username}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-subtitle>Команда соперников</mat-card-subtitle>
+      <mat-card-content>
+        <form class="example-form">
+          <mat-form-field class="example-full-width fieldWidth" appearance="fill">
+            <mat-label>Третий игрок</mat-label>
+            <input type="text"
+                   placeholder="Выберите игрока"
+                   aria-label="player3"
+                   matInput
+                   [formControl]="player3form"
+                   [matAutocomplete]="auto">
+            <button *ngIf="player3form.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(player3form, player3)">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let player of users" [value]="player.username">
+                {{player.username}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+        <form class="example-form">
+          <mat-form-field class="example-full-width fieldWidth" appearance="fill">
+            <mat-label>Четвертый игрок</mat-label>
+            <input type="text"
+                   placeholder="Выберите игрока"
+                   aria-label="player4"
+                   matInput
+                   [formControl]="player4form"
+                   [matAutocomplete]="auto">
+            <button *ngIf="player4form.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(player4form, player4)">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let player of users" [value]="player.username">
+                {{player.username}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="createGame()">Создать игру</button>
+    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>
+  </mat-card-actions>
+</mat-card>
 
-</div>
+
+<!--<mat-card class="main-card">-->
+<!--  <mat-card-title>Создание игры</mat-card-title>-->
+<!--  <mat-card-subtitle>Создатель игры: {{activeUser.username}}</mat-card-subtitle>-->
+<!--  <mat-card-content>-->
+<!--    <mat-card class="example-card">-->
+<!--      <mat-card-subtitle>Команда игрока</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <form class="example-form" [formGroup]="players">-->
+<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
+<!--            <mat-label>Второй игрок</mat-label>-->
+<!--            <input type="text"-->
+<!--                   placeholder="Выберите игрока"-->
+<!--                   aria-label="player2"-->
+<!--                   matInput-->
+<!--                   formControlName="player2form"-->
+<!--                   [matAutocomplete]="auto">-->
+<!--            <button *ngIf="players.value['player2form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player2form'], player2)">-->
+<!--              <mat-icon>close</mat-icon>-->
+<!--            </button>-->
+<!--            <mat-autocomplete #auto="matAutocomplete">-->
+<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
+<!--                {{player.username}}-->
+<!--              </mat-option>-->
+<!--            </mat-autocomplete>-->
+<!--          </mat-form-field>-->
+<!--        </form>-->
+<!--      </mat-card-content>-->
+<!--      <mat-card-subtitle>Команда соперников</mat-card-subtitle>-->
+<!--      <mat-card-content>-->
+<!--        <form class="example-form" [formGroup]="players">-->
+<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
+<!--            <mat-label>Третий игрок</mat-label>-->
+<!--            <input type="text"-->
+<!--                   placeholder="Выберите игрока"-->
+<!--                   aria-label="player3"-->
+<!--                   matInput-->
+<!--                   formControlName="player3form"-->
+<!--                   [matAutocomplete]="auto">-->
+<!--            <button *ngIf="players.value['player3form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player3form'], player3)">-->
+<!--              <mat-icon>close</mat-icon>-->
+<!--            </button>-->
+<!--            <mat-autocomplete #auto="matAutocomplete">-->
+<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
+<!--                {{player.username}}-->
+<!--              </mat-option>-->
+<!--            </mat-autocomplete>-->
+<!--          </mat-form-field>-->
+<!--        </form>-->
+<!--        <form class="example-form" [formGroup]="players">-->
+<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
+<!--            <mat-label>Четвертый игрок</mat-label>-->
+<!--            <input type="text"-->
+<!--                   placeholder="Выберите игрока"-->
+<!--                   aria-label="player4"-->
+<!--                   matInput-->
+<!--                   formControlName="player4form"-->
+<!--                   [matAutocomplete]="auto">-->
+<!--            <button *ngIf="players.value['player4form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player4form'], player4)">-->
+<!--              <mat-icon>close</mat-icon>-->
+<!--            </button>-->
+<!--            <mat-autocomplete #auto="matAutocomplete">-->
+<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
+<!--                {{player.username}}-->
+<!--              </mat-option>-->
+<!--            </mat-autocomplete>-->
+<!--          </mat-form-field>-->
+<!--        </form>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+<!--  </mat-card-content>-->
+<!--  <mat-card-actions class="example-button-row">-->
+<!--    <button mat-raised-button color="primary" (click)="createGame()">Создать игру</button>-->
+<!--    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>-->
+<!--  </mat-card-actions>-->
+<!--</mat-card>-->

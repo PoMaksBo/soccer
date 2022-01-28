@@ -3,6 +3,8 @@ import {User} from "../_models/user.interface";
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map, Observable, tap} from "rxjs";
 import { environment } from 'src/environments/environment';
+import {Router} from "@angular/router";
+import {Team} from "../_models/game";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -10,11 +12,10 @@ export class AuthService {
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
   private token = ""
-  private isAdmin = false
 
-  constructor(private http: HttpClient) {
-    // @ts-ignore
-    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
+  constructor(private http: HttpClient,
+              private router: Router) {
+    this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user') || '{}'));
     this.user = this.userSubject.asObservable();
   }
 
@@ -22,18 +23,17 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-  login(username: string, password: string): Observable<any>{
-  return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
+  public login(username: string, password: string): Observable<User>{
+    // return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, JSON.stringify({username, password}))  //Строка для JSON
+    return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
     .pipe(
       tap(user => {
         localStorage.setItem('user', JSON.stringify(user));
         this.userSubject.next(user)
         if (user.id === 1) {
           localStorage.setItem('Admin', "true")
-          this.setAdmin(true)
         } else {
           localStorage.setItem('Admin', "false")
-          this.setAdmin(false)
         }
         let tokenS = user.token!.toString()
         localStorage.setItem('token', tokenS)
@@ -42,51 +42,46 @@ export class AuthService {
     )
   }
 
-  registred(user: User): Observable<User> {
+  public registred(user: User): Observable<User> {
+    // return this.http.post<User>(`${environment.apiUrl}/users/register`, JSON.stringify(user))
     return this.http.post<User>(`${environment.apiUrl}/users/register`, user)
   }
 
-  setToken(token: string) {
+  private setToken(token: string) {
     this.token = token
   }
 
-  setAdmin(isAdmin: boolean) {
-    this.isAdmin = isAdmin
-  }
-
-  getIsAdmin() {
-    return this.isAdmin
-  }
-
-  getToken() {
+  public getToken(): string {
     return this.token
   }
 
-  isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     return !!this.token
   }
-  logout() {
+
+  public logout(): void {
     this.setToken('')
     localStorage.removeItem('token');
     localStorage.removeItem('Admin');
-    // @ts-ignore
-    this.userSubject.next(null);
+    localStorage.removeItem('user');
+    this.userSubject.complete();
+    this.router.navigate(['/login'])
   }
 
-  getById(id: number) {
+  public getById(id: number): Observable<User> {
     return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
   }
 
-  getAll() {
+  public getAll() {
     return this.http.get<User[]>(`${environment.apiUrl}/users`);
   }
 
-  update(id: number, params: User) {
-    return this.http.put(`${environment.apiUrl}/users/${id}`, params)
+  public update(id: number, params: User): Observable<JSON> {
+    return this.http.put<JSON>(`${environment.apiUrl}/users/${id}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         if (+id == this.userValue.id) {
-          // update local storage
+          // Обновление пользователя в LocalStorage
           const user = { ...this.userValue, ...params };
           localStorage.setItem('user', JSON.stringify(user));
           // publish updated user to subscribers

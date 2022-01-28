@@ -1,28 +1,12 @@
-.card-autorization {
-  margin-top: 250px;
-  margin-left: 40%;
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 260px;
-  max-height: 500px;
-  padding-left: 15px;
-  padding-right: 15px;
-  border: 2px solid #000000;
+.login-form {
+  width: 60%;
+  height: 350px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 40px;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
 }
 
-.input {
-  margin-top: 8px;
-  flex-wrap: wrap;
-  width:100%;
-}
-.er {
-  margin-top: 8px;
-  width:100%;
-  color: red;
-}
-
-.header {
-  margin-top: 8px;
-  flex-wrap: wrap;
-  width:100%;
-}

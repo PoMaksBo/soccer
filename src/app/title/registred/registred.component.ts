@@ -12,6 +12,7 @@ import {AlertService} from "../../services-and-shared/alert.service";
 })
 export class RegistredComponent implements OnInit, OnDestroy {
 
+  hide = true
   aSub?: Subscription
   form!: FormGroup;
   loading = false;
@@ -26,7 +27,7 @@ export class RegistredComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
     });
     this.alertService.clear();
   }
@@ -37,7 +38,7 @@ export class RegistredComponent implements OnInit, OnDestroy {
     }
   }
 
-  register() {
+  public register(): void {
     this.submitted = true;
     this.alertService.clear()
     this.form.disable()

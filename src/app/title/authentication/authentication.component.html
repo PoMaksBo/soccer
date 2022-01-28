@@ -1,36 +1,35 @@
-<form class="card-autorization"
-  [formGroup]="form">
-
-  <div class="header">
-    <header>Войти в систему</header>
-  </div>
-  <div class="input" >
-    <a>Login</a>
-    <input id = 'userName'
-           formControlName="userName"
-    >
-    <div class="er">
-      <span *ngIf="form.controls['userName'].invalid && form.controls['userName'].touched">Введите логин</span>
-    </div>
-
-  </div>
-  <div class="input">
-    <a>Password</a>
-    <input id = 'password'
-           type="password"
-           formControlName="password"
-    >
-  </div>
-  <div class="er">
-    <span *ngIf="form.controls['password'].invalid && form.controls['password'].touched">Введите пароль</span>
-  </div>
-  <button
-    [disabled]="form.invalid || form.disabled"
-    (click)="authentication()">Войти</button>
-
-</form>
-
-
-
-
+<mat-card class="login-form">
+  <mat-card-title>Вход в приложение</mat-card-title>
+  <hr>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Логин игрока</mat-label>
+        <input matInput type="text" formControlName="username" placeholder="Введите ваш логин">
+        <mat-error *ngIf="form.controls['username'].invalid && form.controls['username'].touched">
+          Поле логина <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Пароль игрока</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Введите вашу фамилию">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+          Поле пароля <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+          [disabled]="form.invalid || form.disabled"
+          (click)="authentication()">Войти</button>
+  </mat-card-actions>
+</mat-card>
 
