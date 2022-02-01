@@ -1,1 +1,17 @@
-<p>results works!</p>
+<mat-card class="main-card">
+  <mat-card-title>Результат игры</mat-card-title>
+  <mat-card-subtitle>Место для подзаголовка</mat-card-subtitle>
+    <mat-card-content>
+
+  </mat-card-content>
+  <mat-card-actions class="example-button-row">
+    <button
+      mat-raised-button color="primary"
+      (click)=" saveResult()">Записать игру</button>
+    <!--    <button-->
+    <!--      *ngIf="command"-->
+    <!--      mat-raised-button color="primary"-->
+    <!--      (click)="updateTeams()">Обновить команды</button>-->
+    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>
+  </mat-card-actions>
+</mat-card>

@@ -3,11 +3,23 @@
   <mat-card-content>
     <mat-selection-list [(ngModel)]="teamList" >
       <mat-list-option *ngFor="let team of teams" [value]="team">
-        Название команды:{{team.teamName}}
+        <strong>Название команды: "{{team.teamName}}"</strong>
         Первый игрок: {{team.player1}}
         Второй игрок: {{team.player2}}
       </mat-list-option>
     </mat-selection-list>
+  </mat-card-content>
+<!--  Место для инпута создания команд-->
+  <mat-card-content>
+    <form class="example-form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Название команды</mat-label>
+        <input matInput [formControl]="teamName" placeholder="Введите название команды">
+        <mat-error *ngIf="teamName.errors?.['required'] && teamName.touched">
+          Поле имени команды <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
   </mat-card-content>
   <mat-card-actions class="example-button-row">
     <button mat-raised-button color="primary" (click)="createTeam()">Создать команду</button>

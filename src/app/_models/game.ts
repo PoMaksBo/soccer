@@ -1,17 +1,25 @@
 import {User} from "./user.interface";
 
 export class Game {
-  team1!: Team
-  team2! : Team
+  team1?: Team
+  team2? : Team
   gameDate!: Date
-  winTeam1?: boolean
-  winTeam2?: boolean
+  winnerTeam?: string
+  looserTeam?: string
+  playerWinner?: string
+  looserWinner?: string
   id?: number
+  alias!: string
+  gameStatus?: boolean
+  comment?: string
+  player1?: User
+  player2?: User
 }
 
 export class Team {
-  id!: number
+  id?: number
   teamName!: string
-  player1!: User
+  teamStatus?: number
+  player1?: User
   player2?: User
 }

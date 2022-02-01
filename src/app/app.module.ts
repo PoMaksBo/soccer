@@ -12,7 +12,7 @@ import {MatInputModule} from "@angular/material/input";
 import { AppComponent } from './app.component';
 import { TopPanelComponent } from './title/top-panel/top-panel.component';
 import {AppRoutingModule} from "./app-routing.module";
-import { RegistredComponent } from './title/registred/registred.component';
+import { RegisteredComponent } from './title/registred/registered.component';
 import { AuthenticationComponent } from './title/authentication/authentication.component';
 import { TitleComponent } from './title/title.component';
 import { UserComponent } from './components/user/user.component';
@@ -34,6 +34,8 @@ import { PlayersComponent } from './admin/players/players.component';
 import { TeamsComponent } from './admin/teams/teams.component';
 import { GamesComponent } from './admin/games/games.component';
 import {MatListModule} from "@angular/material/list";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {CookieModule} from "ngx-cookie";
 
 
 
@@ -42,7 +44,7 @@ import {MatListModule} from "@angular/material/list";
   declarations: [
     AppComponent,
     TopPanelComponent,
-    RegistredComponent,
+    RegisteredComponent,
     AuthenticationComponent,
     TitleComponent,
     UserComponent,
@@ -74,11 +76,13 @@ import {MatListModule} from "@angular/material/list";
     MatAutocompleteModule,
     MatSelectModule,
     MatListModule,
+    MatCheckboxModule,
+    CookieModule.forRoot()
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    fakeBackendProvider
+    // fakeBackendProvider
   ],
   bootstrap: [AppComponent]
 })

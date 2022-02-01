@@ -1,9 +1,13 @@
-import {Component, DoCheck, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import {first, Subscription} from "rxjs";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+
 import {User} from "../../../_models/user.interface";
 import {AuthService} from "../../../services-and-shared/auth.service";
-import {first, Subscription} from "rxjs";
-import {AbstractControl, FormControl, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
+import {Team} from "../../../_models/game";
+import {AdminService} from "../../../services-and-shared/admin.service";
+import {GameService} from "../../../services-and-shared/game.service";
 
 @Component({
   selector: 'app-create',
@@ -13,38 +17,46 @@ import {Router} from "@angular/router";
 
 export class CreateComponent implements OnInit, DoCheck, OnDestroy {
 
-  @Output() gameDate!: Date
-
-  player2!: User
-  player3!: User
-  player4!: User
-  activeUser: User
-  users!: User[]
-  player2form = new FormControl()
-  player3form = new FormControl()
-  player4form = new FormControl()
-
-  // players: FormGroup = new FormGroup({
-  //   player2form : new FormControl(),
-  //   player3form : new FormControl(),
-  //   player4form : new FormControl(),
-  // })
-  // private playersFormSubscription!: Subscription
+  public player2!: User
+  public player3!: User
+  public player4!: User
+  public activeUser: User
+  public users!: User[]
+  public player2form = new FormControl()
+  public player3form = new FormControl('', Validators.required)
+  public player4form = new FormControl()
+  public teams!: Team[]
+  public changeTeams: FormGroup
+  private userSub!: Subscription
+  private allTeamsSub!: Subscription
+  public command = false
+  public team1!: Team
+  public team2!: Team
+  public gameName!: string
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private adminService: AdminService,
+    private formBuilder: FormBuilder,
+    private gameService: GameService
   ) {
     this.activeUser = this.authService.userValue
+    this.changeTeams = this.formBuilder.group({
+      team1: ['', Validators.required],
+      team2: ['', Validators.required]
+    })
   }
 
   ngOnInit() {
-    this.authService.getAll().pipe(first()).subscribe(users =>{
+    this.userSub = this.authService.getAll().pipe(first()).subscribe(users =>{
       this.users = users
       let id = +this.activeUser.id!
-      this.users = this.users.filter((x) => x.id !== id).filter((x) => x.username !== 'admin')
+      this.users = this.users.filter((user) => user.id !== id).filter((user) => user.username !== 'admin').filter((user) => user.status !== 0)
     })
-    // this.subscribeToPlayerForms()
+    this.allTeamsSub = this.adminService.getAllTeams().pipe(first()).subscribe(teams => {
+      this.teams = teams
+    })
   }
 
   ngDoCheck(): void {
@@ -57,73 +69,62 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
       })
     }
     if (this.player3form.value) {
-      this.users = this.users.filter((x) => {
-        if (x.username === this.player3form.value) {
-          this.player3 = x
+      this.users = this.users.filter((user) => {
+        if (user.username === this.player3form.value) {
+          this.player3 = user
         }
-        return x.username !== this.player3form.value
+        return user.username !== this.player3form.value
       })
     }
     if (this.player4form.value) {
-      this.users = this.users.filter((x) => {
-        if (x.username === this.player4form.value) {
-          this.player4 = x
+      this.users = this.users.filter((user) => {
+        if (user.username === this.player4form.value) {
+          this.player4 = user
         }
-        return x.username !== this.player4form.value
+        return user.username !== this.player4form.value
       })
     }
   }
 
   ngOnDestroy(): void {
-    // this.playersFormSubscription.unsubscribe()
+    this.allTeamsSub.unsubscribe()
+    this.userSub.unsubscribe()
   }
-
-  // private subscribeToPlayerForms(): void {
-  //   this.playersFormSubscription = this.players.valueChanges
-  //     .subscribe( selectedPlayers => {
-  //       this.checkPlayerForm(selectedPlayers.player2form)
-  //       this.checkPlayerForm(selectedPlayers.player3form)
-  //       this.checkPlayerForm(selectedPlayers.player4form)
-  //       this.player2 = this.saveSelectedUser(selectedPlayers.player2form)
-  //       this.player3 = this.saveSelectedUser(selectedPlayers.player3form)
-  //       this.player4 = this.saveSelectedUser(selectedPlayers.player4form)
-  //     });
-  // }
 
   public clearPlayer(userForm: FormControl, formValue: User): void {
     userForm.reset()
     this.users.push(formValue)
   }
 
-  // public clearPlayer(formControl: AbstractControl, formValue: User): void {
-  //   this.users.push(formValue)
-  //   formControl.reset()
-  // }
-
-  public createGame(): void {
-    this.gameDate = new Date()
-    console.log(`Игра была создана ${this.gameDate}`)
-    this.router.navigate(['../game/results'])
+  public createGameClick(): void {
+    let bundle
+    if (this.command) {
+      this.team1 = this.changeTeams.value.team1
+      this.team1!.player1 = this.activeUser
+      this.team1!.player2 = this.player2
+      this.team2 = this.changeTeams.value.team2
+      this.team2!.player1 = this.player3
+      this.team2!.player2 = this.player4
+      bundle = {
+        team1 : this.team1,
+        team2 : this.team2,
+        gameDate: new Date(),
+        alias: this.gameName
+      }
+    } else {
+      bundle = {
+        player1 : this.activeUser,
+        player2 : this.player3,
+        gameDate: new Date(),
+        alias: this.gameName
+      }
+    }
+    this.gameService.bundle = bundle
+    // this.router.navigate(['../game/results'])
+    console.log('GameName: ', this.gameName)
+    console.log(this.gameService.bundle)
   }
 
-
-  // private saveSelectedUser(userNameFromForm: string): User {
-  //   let userInForm
-  //   for (let player of this.users) {
-  //     if (player.username === userNameFromForm) {
-  //       userInForm = player
-  //     } else break
-  //   }
-  //   if (userInForm === undefined) {
-  //     throw new Error('Переменная не определена')
-  //   }
-  //   return userInForm
-  // }
-
-  //  private checkPlayerForm (userNameFromForm: string): void {
-  //   if (userNameFromForm) {
-  //     this.users = this.users.filter((user) => user.username !== userNameFromForm)
-  //   }
-  // }
+  // public updateTeams() {}
 
 }

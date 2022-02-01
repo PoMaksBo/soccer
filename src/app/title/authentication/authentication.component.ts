@@ -33,8 +33,9 @@ export class AuthenticationComponent implements OnDestroy {
     // reset alerts on submit
     this.alert.clear();
     this.form.disable()
-    this.aSub = this.auth.login(this.form.value.username, this.form.value.password).subscribe(() => {
-        console.log('Login Succesfull!')
+    // this.aSub = this.auth.login(this.form.value.username, this.form.value.password).subscribe(() => {
+    this.aSub = this.auth.login(this.form.value).subscribe(() => {
+    console.log('Login Succesfull!')
         this.router.navigate(['/user/personal'])
       },
       error => {

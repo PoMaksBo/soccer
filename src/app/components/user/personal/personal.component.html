@@ -19,7 +19,7 @@
   </mat-card-content>
     <mat-card-actions class="example-button-row">
       <button mat-raised-button color="primary" (click)="updateUser()">Обновить информацию</button>
-      <button mat-raised-button color="primary" routerLink="../../game/create">Создать игру</button>
+      <button mat-raised-button color="primary" *ngIf="user.status === 1" routerLink="../../game/create">Создать игру</button>
       <button mat-raised-button color="accent" *ngIf="isAdmin" routerLink="../../admin/dashboard">Админ панель</button>
     </mat-card-actions>
 </mat-card>

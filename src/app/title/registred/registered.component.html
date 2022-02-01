@@ -30,22 +30,22 @@
     <form class="example-form">
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Повторите пароль</mat-label>
-        <input matInput [type]="hideRepeat ? 'password' : 'text'" [formControl]="repeatPassword" placeholder="Повторите ваш пароль" [errorStateMatcher]="matcher">
+        <input matInput [type]="hideRepeat ? 'password' : 'text'" [formControl]="repeatPassword" placeholder="Повторите ваш пароль" pattern="{{form.value.password}}">
         <button mat-icon-button matSuffix (click)="hideRepeat = !hideRepeat" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hideRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <p *ngIf="checkPasswordsFields">
-          Пароли не совпадает
-        </p>
-        <mat-error *ngIf="repeatPassword.invalid && repeatPassword.touched">
-          Поле пароля <strong>обязательно!</strong>
-        </mat-error>
+          <mat-error *ngIf="repeatPassword.errors?.['pattern'] && form.controls['password'].touched">
+            Пароли не совпадает
+          </mat-error>
+          <mat-error *ngIf="repeatPassword.errors?.['required'] && repeatPassword.touched">
+            Поле пароля <strong>обязательно!</strong>
+          </mat-error>
       </mat-form-field>
     </form>
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button color="primary"
-            [disabled]="form.invalid || form.disabled"
+            [disabled]="form.invalid || form.disable && repeatPassword.invalid"
             (click)="register()">Создать</button>
   </mat-card-actions>
 </mat-card>

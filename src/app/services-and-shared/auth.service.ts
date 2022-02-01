@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {User} from "../_models/user.interface";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, map, Observable, tap} from "rxjs";
 import { environment } from 'src/environments/environment';
 import {Router} from "@angular/router";
-import {Team} from "../_models/game";
+import {CookieService} from "ngx-cookie";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -12,19 +12,26 @@ export class AuthService {
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
   private token = ""
-
+  public csrf: string
   constructor(private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private _cookieService: CookieService
+  ) {
     this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user') || '{}'));
     this.user = this.userSubject.asObservable();
+    this.csrf = this._cookieService.get('csrftoken')
+    if (typeof(this.csrf) === 'undefined') {
+      this.csrf = '';
+    }
   }
 
   public get userValue(): User {
     return this.userSubject.value;
   }
 
-  public login(username: string, password: string): Observable<User>{
-    return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
+  public login(user: User): Observable<User>{
+    return this.http.post<User>(`${environment.apiUrl}/auth/login/`, user, {headers: new HttpHeaders({ 'X-CSRFToken': this.csrf , })})
+    // return this.http.post<User>(`${environment.apiUrl}/users/authenticate`, {username, password})
     .pipe(
       tap(user => {
         localStorage.setItem('user', JSON.stringify(user));
@@ -43,8 +50,8 @@ export class AuthService {
 
 
   public registred(user: User): Observable<User> {
-    // return this.http.post<User>(`${environment.apiUrl}/registr`, JSON.stringify(user))
-    return this.http.post<User>(`${environment.apiUrl}/users/register`, user)
+      return this.http.post<User>(`${environment.apiUrl}/registr/`, user) //, {headers: {'Access-Control-Allow-Origin': 'http://172.25.0.22:8000'}})
+    // return this.http.post<User>(`${environment.apiUrl}/users/register`, user)
   }
 
   private setToken(token: string) {
@@ -78,7 +85,7 @@ export class AuthService {
 
   public update(id: number, params: User): Observable<JSON> {
     return this.http.put<JSON>(`${environment.apiUrl}/users/${id}`, params)
-      .pipe(map(x => {
+      .pipe(map(user => {
         // update stored user if the logged in user updated their own record
         if (+id == this.userValue.id) {
           // Обновление пользователя в LocalStorage
@@ -87,7 +94,7 @@ export class AuthService {
           // publish updated user to subscribers
           this.userSubject.next(user);
         }
-        return x;
+        return user;
       }));
   }
 }

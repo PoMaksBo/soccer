@@ -19,13 +19,13 @@ export class PersonalComponent implements OnInit {
   user: User
 
   constructor(
-    private acc: AuthService,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService
   ) {
-    this.user = this.acc.userValue
+    this.user = this.authService.userValue
     this.isAdmin = JSON.parse(localStorage.getItem('Admin') || 'false')
   }
 
@@ -36,13 +36,13 @@ export class PersonalComponent implements OnInit {
       firstname: [this.user.firstname],
       lastname: [this.user.lastname]
     })
-    this.acc.getById(this.id)
+    this.authService.getById(this.id)
       .pipe(first())
       .subscribe(x => this.form.patchValue(x));
   }
 
   updateUser() {
-    this.acc.update(this.id, this.form.value)
+    this.authService.update(this.id, this.form.value)
       .pipe(first())
       .subscribe({
         next: () => {

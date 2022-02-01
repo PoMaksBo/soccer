@@ -10,10 +10,15 @@ import {Game} from "../_models/game";
 })
 export class GameService {
 
+  public bundle!: Game | null
   constructor(private http: HttpClient) { }
 
-  create(bundle: Game): Observable<Game> {
-    return this.http.post<Game>(`${environment.apiUrl}/game/create`, bundle)
+  public createTeam(): Observable<Game> {
+    return this.http.post<Game>(`${environment.apiUrl}/game/createTeam`, this.bundle)
+  }
+
+  public createSolo(): Observable<Game> {
+    return this.http.post<Game>(`${environment.apiUrl}/game/createSolo`, this.bundle)
   }
 
 }

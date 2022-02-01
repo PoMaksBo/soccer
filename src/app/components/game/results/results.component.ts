@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {GameService} from "../../../services-and-shared/game.service";
 
 @Component({
   selector: 'app-results',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResultsComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(
+    private gameService: GameService
+  ) { }
 
   ngOnInit(): void {
   }
 
+  public saveResult(): void {}
 }

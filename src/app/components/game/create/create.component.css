@@ -1,6 +1,6 @@
 .example-button-row {
   display: table-cell;
-  width: 490px;
+  width: 600px;
 }
 .example-card {
   max-width: 400px;
@@ -11,4 +11,8 @@
 
 .fieldWidth {
   width: 200px;
+}
+
+.example-margin {
+  margin: 0 10px;
 }

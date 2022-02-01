@@ -6,4 +6,5 @@ export interface User {
   firstname?: string
   lastname?: string
   admin?: boolean
+  status: number
 }

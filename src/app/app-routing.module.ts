@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 import {AuthenticationComponent} from "./title/authentication/authentication.component";
-import {RegistredComponent} from "./title/registred/registred.component";
+import {RegisteredComponent} from "./title/registred/registered.component";
 import {TitleComponent} from "./title/title.component";
 import {UserComponent} from "./components/user/user.component";
 import {PersonalComponent} from "./components/user/personal/personal.component";
@@ -21,7 +21,7 @@ import {DashboardComponent} from "./admin/dashboard/dashboard.component";
 
 const routes: Routes = [
   {path: '', component: TitleComponent, children: [
-      {path: 'registration', component: RegistredComponent},
+      {path: 'registration', component: RegisteredComponent},
       {path: 'login', component: AuthenticationComponent},
       {path: '', redirectTo: '/login', pathMatch: 'full' }
     ]},

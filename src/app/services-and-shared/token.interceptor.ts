@@ -10,16 +10,22 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const user = this.auth.userValue
-    const isLoggedIn = user && user.token
-    const isApiUrl = req.url.startsWith(environment.apiUrl);
-    if (isLoggedIn && isApiUrl) {
+    // const user = this.auth.userValue
+    // const isLoggedIn = user && user.token
+    // const isApiUrl = req.url.startsWith(environment.apiUrl);
+    // if (isLoggedIn && isApiUrl) {
+    //   req = req.clone({
+    //     setHeaders: {
+    //       Authorization: `Bearer ${user.token}`
+    //     }
+    //   });
+    // } else {
       req = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${user.token}`
+          Cookie: 'csrftoken=516AAMvkM12aRfoEJwGF2v2z52J9poY8UDdYqGlGVhFRQJ5T1g4WVgmYbQXEGxzW'
         }
       });
-    }
+    // }
     return next.handle(req)
   }
 }

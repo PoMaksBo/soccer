@@ -1,13 +1,29 @@
 <mat-card class="main-card">
   <mat-card-title>Создание игры</mat-card-title>
   <mat-card-subtitle>Создатель игры: {{activeUser.username}}</mat-card-subtitle>
+  <mat-checkbox class="example-margin" [(ngModel)]="command">Командная игра</mat-checkbox>
   <mat-card-content>
     <mat-card class="example-card">
-      <mat-card-subtitle>Команда игрока</mat-card-subtitle>
+      <mat-card-subtitle>
+        <form class="example-form" [formGroup]="changeTeams" *ngIf="command">
+          <mat-form-field appearance="fill">
+            <mat-label>Выберите первую команду</mat-label>
+            <mat-select formControlName="team1">
+              <mat-option *ngFor="let team of teams" [value]="team">
+                {{team.teamName}}
+              </mat-option>
+              <mat-option></mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="changeTeams.value['team1'] === changeTeams.value['team2'] && changeTeams.touched">
+             Команды не должны совпадать
+          </mat-error>
+        </form>
+      </mat-card-subtitle>
       <mat-card-content>
-        <form class="example-form">
+        <form class="example-form" *ngIf="command">
           <mat-form-field class="example-full-width fieldWidth" appearance="fill">
-            <mat-label>Второй игрок</mat-label>
+            <mat-label>Союзник</mat-label>
               <input type="text"
                 placeholder="Выберите игрока"
                 aria-label="player2"
@@ -25,11 +41,27 @@
           </mat-form-field>
         </form>
       </mat-card-content>
-      <mat-card-subtitle>Команда соперников</mat-card-subtitle>
+      <hr *ngIf="command">
+      <mat-card-subtitle>
+        <form class="example-form" [formGroup]="changeTeams" *ngIf="command">
+          <mat-form-field appearance="fill">
+            <mat-label>Выберите вторую команду</mat-label>
+            <mat-select formControlName="team2">
+              <mat-option *ngFor="let team of teams" [value]="team">
+                {{team.teamName}}
+              </mat-option>
+              <mat-option></mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="changeTeams.value['team1'] === changeTeams.value['team2'] && changeTeams.touched">
+            Команды не должны совпадать
+          </mat-error>
+        </form>
+      </mat-card-subtitle>
       <mat-card-content>
         <form class="example-form">
           <mat-form-field class="example-full-width fieldWidth" appearance="fill">
-            <mat-label>Третий игрок</mat-label>
+            <mat-label>Соперник</mat-label>
             <input type="text"
                    placeholder="Выберите игрока"
                    aria-label="player3"
@@ -46,9 +78,9 @@
             </mat-autocomplete>
           </mat-form-field>
         </form>
-        <form class="example-form">
+        <form class="example-form" *ngIf="command">
           <mat-form-field class="example-full-width fieldWidth" appearance="fill">
-            <mat-label>Четвертый игрок</mat-label>
+            <mat-label>Второй соперник</mat-label>
             <input type="text"
                    placeholder="Выберите игрока"
                    aria-label="player4"
@@ -67,86 +99,23 @@
         </form>
       </mat-card-content>
     </mat-card>
+    <mat-card class="example-card">
+      <mat-card-subtitle>Введите название игры</mat-card-subtitle>
+        <mat-form-field class="example-form-field" appearance="fill">
+          <mat-label>Название игры</mat-label>
+          <input matInput type="text" [(ngModel)]="gameName">
+        </mat-form-field>
+    </mat-card>
   </mat-card-content>
   <mat-card-actions class="example-button-row">
-    <button mat-raised-button color="primary" (click)="createGame()">Создать игру</button>
+    <button
+      mat-raised-button color="primary"
+      [disabled]="(command && player3form.invalid && changeTeams.value['team1'].teamName === changeTeams.value['team2'].teamName) || (!command && player3form.invalid)"
+      (click)="createGameClick()">Создать игру</button>
+<!--    <button-->
+<!--      *ngIf="command"-->
+<!--      mat-raised-button color="primary"-->
+<!--      (click)="updateTeams()">Обновить команды</button>-->
     <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>
   </mat-card-actions>
 </mat-card>
-
-
-<!--<mat-card class="main-card">-->
-<!--  <mat-card-title>Создание игры</mat-card-title>-->
-<!--  <mat-card-subtitle>Создатель игры: {{activeUser.username}}</mat-card-subtitle>-->
-<!--  <mat-card-content>-->
-<!--    <mat-card class="example-card">-->
-<!--      <mat-card-subtitle>Команда игрока</mat-card-subtitle>-->
-<!--      <mat-card-content>-->
-<!--        <form class="example-form" [formGroup]="players">-->
-<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
-<!--            <mat-label>Второй игрок</mat-label>-->
-<!--            <input type="text"-->
-<!--                   placeholder="Выберите игрока"-->
-<!--                   aria-label="player2"-->
-<!--                   matInput-->
-<!--                   formControlName="player2form"-->
-<!--                   [matAutocomplete]="auto">-->
-<!--            <button *ngIf="players.value['player2form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player2form'], player2)">-->
-<!--              <mat-icon>close</mat-icon>-->
-<!--            </button>-->
-<!--            <mat-autocomplete #auto="matAutocomplete">-->
-<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
-<!--                {{player.username}}-->
-<!--              </mat-option>-->
-<!--            </mat-autocomplete>-->
-<!--          </mat-form-field>-->
-<!--        </form>-->
-<!--      </mat-card-content>-->
-<!--      <mat-card-subtitle>Команда соперников</mat-card-subtitle>-->
-<!--      <mat-card-content>-->
-<!--        <form class="example-form" [formGroup]="players">-->
-<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
-<!--            <mat-label>Третий игрок</mat-label>-->
-<!--            <input type="text"-->
-<!--                   placeholder="Выберите игрока"-->
-<!--                   aria-label="player3"-->
-<!--                   matInput-->
-<!--                   formControlName="player3form"-->
-<!--                   [matAutocomplete]="auto">-->
-<!--            <button *ngIf="players.value['player3form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player3form'], player3)">-->
-<!--              <mat-icon>close</mat-icon>-->
-<!--            </button>-->
-<!--            <mat-autocomplete #auto="matAutocomplete">-->
-<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
-<!--                {{player.username}}-->
-<!--              </mat-option>-->
-<!--            </mat-autocomplete>-->
-<!--          </mat-form-field>-->
-<!--        </form>-->
-<!--        <form class="example-form" [formGroup]="players">-->
-<!--          <mat-form-field class="example-full-width fieldWidth" appearance="fill">-->
-<!--            <mat-label>Четвертый игрок</mat-label>-->
-<!--            <input type="text"-->
-<!--                   placeholder="Выберите игрока"-->
-<!--                   aria-label="player4"-->
-<!--                   matInput-->
-<!--                   formControlName="player4form"-->
-<!--                   [matAutocomplete]="auto">-->
-<!--            <button *ngIf="players.value['player4form']" matSuffix mat-icon-button aria-label="Clear" (click)="clearPlayer(players.controls['player4form'], player4)">-->
-<!--              <mat-icon>close</mat-icon>-->
-<!--            </button>-->
-<!--            <mat-autocomplete #auto="matAutocomplete">-->
-<!--              <mat-option *ngFor="let player of users" [value]="player.username">-->
-<!--                {{player.username}}-->
-<!--              </mat-option>-->
-<!--            </mat-autocomplete>-->
-<!--          </mat-form-field>-->
-<!--        </form>-->
-<!--      </mat-card-content>-->
-<!--    </mat-card>-->
-<!--  </mat-card-content>-->
-<!--  <mat-card-actions class="example-button-row">-->
-<!--    <button mat-raised-button color="primary" (click)="createGame()">Создать игру</button>-->
-<!--    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>-->
-<!--  </mat-card-actions>-->
-<!--</mat-card>-->

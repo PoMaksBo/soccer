@@ -38,6 +38,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                   return createTeam();
                 case url.endsWith('/teams') && method === 'GET':
                   return getTeams();
+              case url.match(/\/teams\/\d+$/) && method === 'DELETE':
+                return deleteTeam();
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
@@ -64,6 +66,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             //   user.id = 1
             // } else {
               user.id = users.length ? Math.max(...users.map((x: { id: any; }) => x.id)) + 1 : 1;
+              user.status = 1
             // }
             users.push(user);
             localStorage.setItem(usersKey, JSON.stringify(users));
@@ -150,11 +153,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         if (teams.find((team: { teamName: string; }) => team.teamName === teamForRequest.teamName)) {
           return error('Team name "' + teamForRequest.teamName + '" is already taken')
         }
-        // if (!(users.find((x: {id: number}) => x.id == 1))) {
-        //   user.id = 1
-        // } else {
         teamForRequest.id = teams.length ? Math.max(...teams.map((x: { id: any; }) => x.id)) + 1 : 1;
-        // }
         teams.push(teamForRequest);
         localStorage.setItem(teamsKey, JSON.stringify(teams));
         return teamResponse();
@@ -164,6 +163,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         if (!isLoggedIn()) return unauthorized();
         return teamResponse(teams.map((team: Team) => basicDetailsTeam(team)));
       }
+
+      function deleteTeam() {
+        teams = teams.filter((team: { id: any; }) => team.id !== idFromUrl());
+        localStorage.setItem(teamsKey, JSON.stringify(teams));
+        return userResponse();
+      }
+
+    //  Методы для создания игр
 
     }
 }
