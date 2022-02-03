@@ -16,6 +16,8 @@ import {TeamsComponent} from "./admin/teams/teams.component";
 import {GamesComponent} from "./admin/games/games.component";
 import {PlayersComponent} from "./admin/players/players.component";
 import {DashboardComponent} from "./admin/dashboard/dashboard.component";
+import {TestComponent} from "./test/test.component";
+import {StatisticsComponent} from "./components/statistics/statistics.component";
 
 // canActivate: [AuthGuard] - условие авторизации
 
@@ -23,7 +25,7 @@ const routes: Routes = [
   {path: '', component: TitleComponent, children: [
       {path: 'registration', component: RegisteredComponent},
       {path: 'login', component: AuthenticationComponent},
-      {path: '', redirectTo: '/login', pathMatch: 'full' }
+      {path: '', redirectTo: '/login', pathMatch: 'full' },
     ]},
   {path: 'user', component: UserComponent, canActivate: [AuthGuard], children:[
       {path: 'personal', component:  PersonalComponent},
@@ -38,7 +40,8 @@ const routes: Routes = [
       {path: 'games', component: GamesComponent},
       {path: 'players', component: PlayersComponent},
       {path: 'team', component: TeamsComponent}
-    ]}
+    ]},
+  {path: 'statistics', component: StatisticsComponent}
 ];
 
 @NgModule({

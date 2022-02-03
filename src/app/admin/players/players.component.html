@@ -1,13 +1,13 @@
 <mat-card>
-  <mat-card-title>Информация об зарегистрировавшихся игроках</mat-card-title>
+  <mat-card-title>Информация о зарегистрировавшихся игроках</mat-card-title>
   <mat-card-content>
     <mat-selection-list [(ngModel)]="userList" >
       <mat-list-option *ngFor="let user of users" [value]="user">
-        Игрок: {{user.username}}. Статус игрока: {{user.status}}
+        Игрок: {{user.username}}. Статус игрока: {{viewStatus(user)}}
       </mat-list-option>
     </mat-selection-list>
   </mat-card-content>
   <mat-card-actions class="example-button-row">
-    <button mat-raised-button color="primary" (click)="disablePlayers()">Удалить выбранных игроков</button>
+    <button mat-raised-button color="primary" (click)="disablePlayers()">Отключить выбранных игроков</button>
   </mat-card-actions>
 </mat-card>

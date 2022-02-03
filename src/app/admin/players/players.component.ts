@@ -32,7 +32,7 @@ export class PlayersComponent implements OnInit {
       if (changeUser.id == 1) continue
       this.adminService.disablePlayer(changeUser.id!, changeUser)
         .pipe(first())
-        // .subscribe(() => this.users = this.users.filter(x => x.id !== changeUser.id!));
+        // .subscribe(() => this.users-stat = this.users-stat.filter(x => x.id !== changeUser.id!));
     .subscribe({
       next: () => {
         this.alertService.success( `Статус игрока ${changeUser.username} изменен` );
@@ -50,4 +50,13 @@ export class PlayersComponent implements OnInit {
     this.userList = undefined
   }
 
+  public viewStatus(player: User) {
+    let status: string
+    if (player.player_status) {
+      status = 'активен'
+    } else {
+      status = 'отключен'
+    }
+    return status
+  }
 }

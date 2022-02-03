@@ -3,8 +3,9 @@ export interface User {
   token?: string
   username: string
   password: string
-  firstname?: string
-  lastname?: string
-  admin?: boolean
-  status: number
+  first_name?: string
+  last_name?: string
+  is_superuser?: boolean
+  player_status: boolean
+  player_rating: number
 }

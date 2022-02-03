@@ -3,9 +3,9 @@
   <mat-card-content>
     <mat-selection-list [(ngModel)]="teamList" >
       <mat-list-option *ngFor="let team of teams" [value]="team">
-        <strong>Название команды: "{{team.teamName}}"</strong>
-        Первый игрок: {{team.player1}}
-        Второй игрок: {{team.player2}}
+        <strong>Название команды: "{{team.team_name}}"  Статус команды: {{team.team_status}}</strong>
+<!--        Первый игрок: {{team.player1}}-->
+<!--        Второй игрок: {{team.player2}}-->
       </mat-list-option>
     </mat-selection-list>
   </mat-card-content>
@@ -14,8 +14,8 @@
     <form class="example-form">
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Название команды</mat-label>
-        <input matInput [formControl]="teamName" placeholder="Введите название команды">
-        <mat-error *ngIf="teamName.errors?.['required'] && teamName.touched">
+        <input matInput [formControl]="team_name" placeholder="Введите название команды">
+        <mat-error *ngIf="team_name.errors?.['required'] && team_name.touched">
           Поле имени команды <strong>обязательно!</strong>
         </mat-error>
       </mat-form-field>
@@ -23,6 +23,6 @@
   </mat-card-content>
   <mat-card-actions class="example-button-row">
     <button mat-raised-button color="primary" (click)="createTeam()">Создать команду</button>
-    <button mat-raised-button color="primary" (click)="deleteTeams()">Удалить выбранные команды</button>
+    <button mat-raised-button color="primary" (click)="disableTeams()">Изменить статус команды</button>
   </mat-card-actions>
 </mat-card>

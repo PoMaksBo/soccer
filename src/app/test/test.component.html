@@ -1,0 +1,32 @@
+<mat-card class="login-form">
+  <mat-card-title>Изменение имени и  фамилии {{user.first_name}}</mat-card-title>
+  <hr>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Имя</mat-label>
+        <input matInput type="text" formControlName="first_name" placeholder="Введите имя">
+        <mat-error *ngIf="form.controls['first_name'].invalid && form.controls['first_name'].touched">
+          Поле логина <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Фамилия</mat-label>
+        <input matInput formControlName="last_name" placeholder="Введите фамилию">
+        <mat-error *ngIf="form.controls['last_name'].invalid && form.controls['last_name'].touched">
+          Поле пароля <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+            (click)="correctData()">Войти</button>
+    <button mat-raised-button color="primary" (click)="getdata()">push get</button>
+  </mat-card-actions>
+</mat-card>
+

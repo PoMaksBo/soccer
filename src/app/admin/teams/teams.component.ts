@@ -16,7 +16,7 @@ export class TeamsComponent implements OnInit {
 
   teamList?: Team[]
   teams!: Team[]
-  teamName!: FormControl
+  team_name!: FormControl
   constructor(
     private authService: AuthService,
     private adminService: AdminService,
@@ -27,37 +27,58 @@ export class TeamsComponent implements OnInit {
     this.adminService.getAllTeams().pipe(first()).subscribe(teams => {
       this.teams = teams
     })
-    this.teamName = new FormControl('', Validators.required)
+    this.team_name = new FormControl('', Validators.required)
     this.alertService.clear();
   }
 
-  public deleteTeams(): void {
-    for (let changeTeam of this.teamList!) {
-      this.adminService.deleteTeam(changeTeam.id!)
-        .pipe(first())
-        .subscribe(() => this.teams = this.teams.filter(x => x.id !== changeTeam.id!));
-    }
-    this.teamList = undefined
-  }
-  public createTeam() {
+  // public deleteTeams(): void {
+  //   for (let changeTeam of this.teamList!) {
+  //     this.adminService.deleteTeam(changeTeam.id!)
+  //       .pipe(first())
+  //       .subscribe(() => this.teams = this.teams.filter(x => x.id !== changeTeam.id!));
+  //   }
+  //   this.teamList = undefined
+  // }
+
+  public createTeam(): void {
     this.alertService.clear()
-    this.teamName.disable()
-    let team: Team = {teamName: this.teamName.value}
+    this.team_name.disable()
+    let team: Team = {team_name: this.team_name.value}
     this.adminService.createTeam(team).pipe(first())
       .subscribe({
         next: () => {
           this.alertService.success('Команда создана');
-          this.teamName.reset()
-          this.teamName.enable()
+          this.team_name.reset()
+          this.team_name.enable()
         },
         error: error => {
           this.alertService.error(error);
-          this.teamName.enable()
+          this.team_name.enable()
         }
       });
     this.adminService.getAllTeams().pipe(first()).subscribe(teams => {
       this.teams = teams
     })
+  }
+
+  public disableTeams(): void {
+    for (let changeTeam of this.teamList!) {
+      this.adminService.disableTeam(changeTeam.id!, changeTeam)
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            this.alertService.success( `Статус команды ${changeTeam.team_name} изменен` );
+            this.adminService.getAllTeams().pipe(first()).subscribe(teams => {
+              this.teams = teams
+            })
+          },
+          error: error => {
+            this.alertService.error(error);
+            console.warn(error)
+          }
+        });
+    }
+    this.teamList = undefined
   }
 
 }

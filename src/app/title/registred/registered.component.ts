@@ -43,10 +43,6 @@ export class RegisteredComponent implements OnInit, OnDestroy {
     }
   }
 
-  // public register(): void {
-  //   this.aSub = this.authService.registred(this.form.value).subscribe(() =>console.log('true'))
-  // }
-
   public register(): void {
     this.alertService.clear()
     this.form.disable()

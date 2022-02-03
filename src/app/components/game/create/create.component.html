@@ -10,9 +10,8 @@
             <mat-label>Выберите первую команду</mat-label>
             <mat-select formControlName="team1">
               <mat-option *ngFor="let team of teams" [value]="team">
-                {{team.teamName}}
+                {{team.team_name}}
               </mat-option>
-              <mat-option></mat-option>
             </mat-select>
           </mat-form-field>
           <mat-error *ngIf="changeTeams.value['team1'] === changeTeams.value['team2'] && changeTeams.touched">
@@ -48,9 +47,8 @@
             <mat-label>Выберите вторую команду</mat-label>
             <mat-select formControlName="team2">
               <mat-option *ngFor="let team of teams" [value]="team">
-                {{team.teamName}}
+                {{team.team_name}}
               </mat-option>
-              <mat-option></mat-option>
             </mat-select>
           </mat-form-field>
           <mat-error *ngIf="changeTeams.value['team1'] === changeTeams.value['team2'] && changeTeams.touched">
@@ -110,7 +108,7 @@
   <mat-card-actions class="example-button-row">
     <button
       mat-raised-button color="primary"
-      [disabled]="(command && player3form.invalid && changeTeams.value['team1'].teamName === changeTeams.value['team2'].teamName) || (!command && player3form.invalid)"
+      [disabled]="((command && player3form.invalid && changeTeams.value['team1'].teamName === changeTeams.value['team2'].teamName) || (!command && player3form.invalid)) || (gameName.length === 0)"
       (click)="createGameClick()">Создать игру</button>
 <!--    <button-->
 <!--      *ngIf="command"-->

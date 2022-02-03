@@ -9,15 +9,16 @@ import {User} from "../../_models/user.interface";
 })
 export class DashboardComponent implements OnInit {
 
-  user: User
+  user!: User
   players = false
   games = false
   teams = false
 
   constructor(
-    private acc: AuthService
+    private authService: AuthService
   ) {
-    this.user = this.acc.userValue
+    this.user = this.authService.userValue
+    // this.authService.user.subscribe(player => this.user = player)
   }
 
   ngOnInit(): void {}

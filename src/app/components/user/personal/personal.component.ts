@@ -16,7 +16,7 @@ export class PersonalComponent implements OnInit {
   isAdmin! : boolean
   id!: number
   form!: FormGroup
-  user: User
+  user!: User
 
   constructor(
     private authService: AuthService,
@@ -25,16 +25,18 @@ export class PersonalComponent implements OnInit {
     private router: Router,
     private alertService: AlertService
   ) {
-    this.user = this.authService.userValue
+    // this.user = this.authService.userValue
+    this.authService.user.subscribe(player => this.user = player)
     this.isAdmin = JSON.parse(localStorage.getItem('Admin') || 'false')
+    // this.isAdmin = this.user.is_superuser
   }
 
   ngOnInit(): void {
     this.id = (this.user.id!)
     this.form = this.formBuilder.group({
       username: [this.user.username],
-      firstname: [this.user.firstname],
-      lastname: [this.user.lastname]
+      first_name: [this.user.first_name],
+      last_name: [this.user.last_name]
     })
     this.authService.getById(this.id)
       .pipe(first())

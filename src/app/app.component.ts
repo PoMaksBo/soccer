@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthService} from "./services-and-shared/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  constructor(
+    private loggin: AuthService
+  ) {
+    this.loggin.test().subscribe(x => {
+      console.log(x)
+    })
+  }
 }

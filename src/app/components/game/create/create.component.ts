@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
   public player2!: User
   public player3!: User
   public player4!: User
-  public activeUser: User
+  public activeUser!: User
   public users!: User[]
   public player2form = new FormControl()
   public player3form = new FormControl('', Validators.required)
@@ -41,7 +41,8 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
     private formBuilder: FormBuilder,
     private gameService: GameService
   ) {
-    this.activeUser = this.authService.userValue
+    // this.activeUser = this.authService.userValue
+    this.authService.user.subscribe(player => this.activeUser = player)
     this.changeTeams = this.formBuilder.group({
       team1: ['', Validators.required],
       team2: ['', Validators.required]
@@ -52,11 +53,13 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
     this.userSub = this.authService.getAll().pipe(first()).subscribe(users =>{
       this.users = users
       let id = +this.activeUser.id!
-      this.users = this.users.filter((user) => user.id !== id).filter((user) => user.username !== 'admin').filter((user) => user.status !== 0)
+      this.users = this.users.filter((user) => user.id !== id).filter((user) => user.is_superuser !== true).filter((user) => user.player_status !== false)
     })
     this.allTeamsSub = this.adminService.getAllTeams().pipe(first()).subscribe(teams => {
       this.teams = teams
+      this.teams = this.teams.filter((team) => team.team_status !== 0)
     })
+
   }
 
   ngDoCheck(): void {
@@ -100,29 +103,23 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
     let bundle
     if (this.command) {
       this.team1 = this.changeTeams.value.team1
-      this.team1!.player1 = this.activeUser
-      this.team1!.player2 = this.player2
       this.team2 = this.changeTeams.value.team2
-      this.team2!.player1 = this.player3
-      this.team2!.player2 = this.player4
       bundle = {
         team1 : this.team1,
         team2 : this.team2,
-        gameDate: new Date(),
+        dt: new Date(),
         alias: this.gameName
       }
     } else {
       bundle = {
         player1 : this.activeUser,
         player2 : this.player3,
-        gameDate: new Date(),
+        dt: new Date(),
         alias: this.gameName
       }
     }
-    this.gameService.bundle = bundle
-    // this.router.navigate(['../game/results'])
-    console.log('GameName: ', this.gameName)
-    console.log(this.gameService.bundle)
+    this.gameService.localBundle = bundle
+    this.router.navigate(['../game/results'])
   }
 
   // public updateTeams() {}
