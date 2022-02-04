@@ -20,6 +20,7 @@ export class GamesListComponent implements OnInit {
 
   games!: Game[]
   columnsToDisplay = ['id', 'alias', 'dt'];
+  columnsToRow = ['id', 'alias', 'dt | date: "medium"'];
   expandedElement!: Game | null;
   constructor(
     private gameService: GameService

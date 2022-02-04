@@ -8,11 +8,11 @@ import {AuthService} from "./services-and-shared/auth.service";
 })
 export class AppComponent {
 
-  constructor(
-    private loggin: AuthService
-  ) {
-    this.loggin.test().subscribe(x => {
-      console.log(x)
-    })
-  }
+  // constructor(
+  //   private loggin: AuthService
+  // ) {
+  //   this.loggin.test().subscribe(x => {
+  //     console.log(x)
+  //   })
+  // }
 }
