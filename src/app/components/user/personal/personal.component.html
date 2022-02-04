@@ -1,0 +1,28 @@
+<mat-card>
+  <mat-card-title>Персональная страница игрока {{user.username}}.</mat-card-title>
+  <mat-card-subtitle>Информация об игроке</mat-card-subtitle>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Имя игрока</mat-label>
+        <input matInput type="text" formControlName="first_name" placeholder="Введите ваше имя">
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Фамилия игрока</mat-label>
+        <input matInput type="text" formControlName="last_name" placeholder="Введите вашу фамилию">
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <mat-card-subtitle>Ваши победы равны: {{user.player_rating}}</mat-card-subtitle>
+  </mat-card-content>
+    <mat-card-actions class="example-button-row">
+      <button mat-raised-button color="primary" (click)="updateUser()">Обновить информацию</button>
+      <button mat-raised-button color="primary" *ngIf="user.player_status === true && !isAdmin" routerLink="../../game/create">Создать игру</button>
+      <button mat-raised-button color="accent" *ngIf="isAdmin" routerLink="../../admin/dashboard">Админ панель</button>
+    </mat-card-actions>
+</mat-card>

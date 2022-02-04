@@ -1,0 +1,42 @@
+<mat-card class="main-card">
+  <mat-card-title>Результат игры {{viewBundle.alias}}</mat-card-title>
+  <mat-card-subtitle>Игра была создана {{viewBundle.dt | date: 'medium'}}</mat-card-subtitle>
+  <mat-card-content *ngIf="viewBundle.team2 === undefined">
+    <label id="player-radio-group-label">Укажите победителя по итогам игры</label>
+    <mat-radio-group
+      aria-labelledby="player-radio-group-label"
+      class="example-radio-group"
+      [(ngModel)]="changePlayerWinner">
+      <mat-radio-button class="example-radio-button" *ngFor="let player of players" [value]="player">
+        {{player.username}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <div>Победитель в игре: {{changePlayerWinner?.username}}</div>
+  </mat-card-content>
+  <mat-card-content *ngIf="viewBundle.team2 !== undefined">
+    <label id="team-radio-group-label">Укажите победителя по итогам игры</label>
+    <mat-radio-group
+      aria-labelledby="team-radio-group-label"
+      class="example-radio-group"
+      [(ngModel)]="changeTeamWinner">
+      <mat-radio-button class="example-radio-button" *ngFor="let team of teams" [value]="team">
+        {{team.team_name}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <div>Команда победитель: {{changeTeamWinner?.team_name}}</div>
+  </mat-card-content>
+  <mat-card class="example-card">
+    <mat-card-subtitle>Оставте комментарий для игры</mat-card-subtitle>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Комментарий</mat-label>
+      <input matInput type="text" [(ngModel)]="comment">
+    </mat-form-field>
+  </mat-card>
+  <mat-card-actions class="example-button-row">
+    <button
+      mat-raised-button color="primary"
+      (click)=" saveResult()">Записать игру</button>
+<!--    <button mat-raised-button color="primary" routerLink="../../game/create">Вернуться к созданию игры</button>-->
+<!--    <button mat-raised-button color="accent" routerLink="../../user/personal">Вернуться на страницу игрока</button>-->
+  </mat-card-actions>
+</mat-card>

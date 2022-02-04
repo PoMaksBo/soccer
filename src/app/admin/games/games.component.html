@@ -1,0 +1,13 @@
+<mat-card>
+  <mat-card-title>Информация о прошедших играх</mat-card-title>
+  <mat-card-content>
+    <mat-selection-list [(ngModel)]="gameList" >
+      <mat-list-option *ngFor="let game of games" [value]="game">
+        {{game.id}}. Игра {{game.alias}} была сыграна {{game.dt | date: 'medium'}}
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-card-content>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="deleteGames()">Удалить выбранные игры</button>
+  </mat-card-actions>
+</mat-card>

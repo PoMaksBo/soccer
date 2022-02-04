@@ -1,0 +1,15 @@
+<app-top-bar></app-top-bar>
+<mat-card>
+  <mat-card-title>Таблицы рейтингов</mat-card-title>
+  <mat-card-actions class="example-button-row">
+    <button mat-raised-button color="primary" (click)="viewPlayers()">Просмотр рейтинга игроков</button>
+    <button mat-raised-button color="primary" (click)="viewGames()">Просмотр списка игр</button>
+    <button mat-raised-button color="primary" (click)="viewTeams()">Просмотр рейтинга команд</button>
+    <button mat-raised-button color="accent" routerLink="../user/personal">Вернуться на страницу игрока</button>
+  </mat-card-actions>
+  <mat-card-content>
+    <app-users-stat *ngIf="players"></app-users-stat>
+    <app-games-list *ngIf="games"></app-games-list>
+    <app-teams-stat *ngIf="teams"></app-teams-stat>
+  </mat-card-content>
+</mat-card>

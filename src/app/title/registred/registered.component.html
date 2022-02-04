@@ -1,0 +1,54 @@
+<mat-card class="login-form">
+  <mat-card-title>Регистрация игрока</mat-card-title>
+  <hr>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Логин игрока</mat-label>
+        <input matInput type="text" formControlName="username" placeholder="Введите ваш логин">
+        <mat-error *ngIf="form.controls['username'].invalid && form.controls['username'].touched">
+          Поле логина <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <form class="example-form" [formGroup]="form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Пароль игрока</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Введите ваш пароль">
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+          Поле пароля <strong>обязательно!</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-content>
+    <form class="example-form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Повторите пароль</mat-label>
+        <input matInput [type]="hideRepeat ? 'password' : 'text'" [formControl]="repeatPassword" placeholder="Повторите ваш пароль" pattern="{{form.value.password}}">
+        <button mat-icon-button matSuffix (click)="hideRepeat = !hideRepeat" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hideRepeat ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+          <mat-error *ngIf="repeatPassword.errors?.['pattern'] && form.controls['password'].touched">
+            Пароли не совпадает
+          </mat-error>
+          <mat-error *ngIf="repeatPassword.errors?.['required'] && repeatPassword.touched">
+            Поле пароля <strong>обязательно!</strong>
+          </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary"
+            [disabled]="form.invalid || form.disable && repeatPassword.invalid"
+            (click)="register()">Создать</button>
+  </mat-card-actions>
+</mat-card>
+
+
+
