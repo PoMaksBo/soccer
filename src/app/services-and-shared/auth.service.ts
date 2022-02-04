@@ -76,6 +76,7 @@ export class AuthService {
     return this.http.get<User[]>(`${environment.apiUrl}/players`);
   }
   // Оригинальный метод
+<<<<<<< HEAD
   public update(id: number, params: User): Observable<JSON> {
     return this.http.put<JSON>(`${environment.apiUrl}/player/${id}`, params)
       .pipe(map(user => {
@@ -118,4 +119,48 @@ export class AuthService {
   //     )
   // }
 
+=======
+  // public update(id: number, params: User): Observable<JSON> {
+  //   return this.http.put<JSON>(`${environment.apiUrl}/player/${id}`, params)
+  //     .pipe(map(user => {
+  //       // update stored user if the logged in user updated their own record
+  //       if (+id == this.userValue.id) {
+  //         // Обновление пользователя в LocalStorage
+  //         const user = {...this.userValue, ...params};
+  //         localStorage.setItem('user', JSON.stringify(user));
+  //         // publish updated user to subscribers
+  //         this.userSubject.next(user);
+  //       }
+  //       return user;
+  //     }));
+  // }
+
+  //Тестовый метод
+  public update(id: number, params: User): Observable<JSON> {
+      return this.http.put<JSON>(`http://172.25.0.22:8000/player/${id}/`, params)
+        .pipe(map(user => {
+          // update stored user if the logged in user updated their own record
+          if (+id == this.userValue.id) {
+            // Обновление пользователя в LocalStorage
+            const user = { ...this.userValue, ...params };
+            localStorage.setItem('user', JSON.stringify(user));
+            // publish updated user to subscribers
+            this.userSubject.next(user);
+          }
+          return user;
+        }));
+  }
+
+  public test(): Observable<User>{
+    return this.http.get<User>(`http://172.25.0.22:8000/player/1/`)
+      .pipe(
+        tap(user => {
+          localStorage.setItem('user', JSON.stringify(user));
+          console.log('Test', user)
+         this.userSubject.next(user)
+        })
+      )
+  }
+
+>>>>>>> a514326cac6e8b0f615840adf06c76e4b611fa6f
 }
