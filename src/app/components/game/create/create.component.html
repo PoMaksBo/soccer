@@ -108,7 +108,7 @@
   <mat-card-actions class="example-button-row">
     <button
       mat-raised-button color="primary"
-      [disabled]="((command && player3form.invalid && changeTeams.value['team1'].teamName === changeTeams.value['team2'].teamName) || (!command && player3form.invalid)) || (gameName.length === 0)"
+      [disabled]="((command && player3form.invalid && changeTeams.value['team1'].teamName === changeTeams.value['team2'].teamName) || (!command && player3form.invalid)) || (gameName == null)"
       (click)="createGameClick()">Создать игру</button>
 <!--    <button-->
 <!--      *ngIf="command"-->

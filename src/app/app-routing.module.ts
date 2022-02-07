@@ -41,7 +41,7 @@ const routes: Routes = [
       {path: 'players', component: PlayersComponent},
       {path: 'team', component: TeamsComponent}
     ]},
-  {path: 'statistics', component: StatisticsComponent}
+  {path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

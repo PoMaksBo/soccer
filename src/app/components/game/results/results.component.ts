@@ -23,6 +23,7 @@ export class ResultsComponent implements OnInit {
     private gameService: GameService,
     private router: Router,
   ) {
+    this.gameService.localBundle = JSON.parse(localStorage.getItem('gameBundle') || '')
     this.viewBundle = this.gameService.localBundle
     if (this.viewBundle.player1 && this.viewBundle.player2) {
       this.players = [this.viewBundle.player1, this.viewBundle.player2]
@@ -33,7 +34,6 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-
 
   public saveResult(): void {
     if (this.viewBundle.player1 && this.viewBundle.player2) {

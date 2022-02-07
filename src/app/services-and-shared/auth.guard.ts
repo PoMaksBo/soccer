@@ -9,8 +9,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const token = localStorage.getItem('token');
-    if (token) {
+    const user = localStorage.getItem('user');
+    if (user) {
       // authorised so return true
       return of(true);
     }

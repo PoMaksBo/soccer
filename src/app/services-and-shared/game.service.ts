@@ -46,6 +46,7 @@ export class GameService {
 
   public createGame(): Observable<Game> {
     this.bundle = this.reverseBundle(this.localBundle)
+    localStorage.removeItem('gameBundle');
     return this.http.post<Game>(`${environment.apiUrl}/createGame`, this.bundle)
   }
 

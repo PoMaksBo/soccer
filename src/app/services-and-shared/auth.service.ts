@@ -64,6 +64,7 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('Admin');
     localStorage.removeItem('user');
+    localStorage.removeItem('gameBundle');
     this.userSubject.complete();
     this.router.navigate(['/login'])
   }

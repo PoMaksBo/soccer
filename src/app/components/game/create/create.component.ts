@@ -118,10 +118,8 @@ export class CreateComponent implements OnInit, DoCheck, OnDestroy {
         alias: this.gameName
       }
     }
-    this.gameService.localBundle = bundle
+    localStorage.setItem('gameBundle', JSON.stringify(bundle))
     this.router.navigate(['../game/results'])
   }
-
-  // public updateTeams() {}
 
 }
