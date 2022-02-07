@@ -15,6 +15,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatIconModule} from "@angular/material/icon";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
+import {MatTableModule} from "@angular/material/table";
 
 import { AppComponent } from './app.component';
 import { TopPanelComponent } from './title/top-panel/top-panel.component';
@@ -44,7 +45,7 @@ import { TeamsStatComponent } from './components/statistics/teams-stat/teams-sta
 import {TestComponent} from "./test/test.component";
 import { GamesListComponent } from './components/statistics/games-list/games-list.component';
 import { GameResultComponent } from './components/statistics/games-list/game-result/game-result.component';
-import {MatTableModule} from "@angular/material/table";
+
 
 
 @NgModule({
